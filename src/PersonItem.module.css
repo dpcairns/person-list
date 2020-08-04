@@ -1,0 +1,5 @@
+.Box {
+    background-color: pink;
+}
+
+/* the problem is that we already have a Box class. In traditional CSS, it will overwrite the original one. */

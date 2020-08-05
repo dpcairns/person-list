@@ -3,6 +3,8 @@ import styles from './App.module.css';
 import PersonList from './PersonList.js';
 import Counter from './Counter.js';
 import Form from './Form.js';
+import DropdownFilter from './DropdownFilter.js';
+import DogList from './DogList.js';
 
 const names = [
   'Abba',
@@ -67,23 +69,14 @@ class App extends React.Component {
 
     this.setState({ filter: type })
   }
+  
   render() {
     const filteredDogs = dogs.filter(dog => dog.type === this.state.filter)
 
     return (
         <header className={styles.Box}>
-            <select onChange={this.handleDogType} name="cars" id="cars">
-                {
-                    options.map(booger => <option key={booger} value={booger}>{booger}</option>)
-                }
-            </select>
-          {
-            filteredDogs.map(dog => <p>{dog.name}</p>)
-          }
-          {/* <Form options={options} /> */}
-          {/* <Counter />
-          <PersonList names={names} />
-          <PersonList names={names2} /> */}
+          <DropdownFilter options={options} handleDogType={this.handleDogType} />
+          <DogList dogs={filteredDogs} />
         </header>
     );
   }

@@ -1,67 +1,25 @@
 import React from 'react';
 import styles from './App.module.css';
-import PersonList from './PersonList.js';
-import Counter from './Counter.js';
-import Form from './Form.js';
-import DropdownFilter from './DropdownFilter.js';
-import DogList from './DogList.js';
-
-const names = [
-  'Abba',
-  'Bob',
-  'Cat',
-  'Diego',
-  'Evan'
-]
-
-const names2 = [
-  'Al',
-  'Ba',
-  'Co',
-  'Do',
-  'Ev'
-]
-
-const options = [
-  'chihuahua',
-  'labradoodle',
-  'st bernard',
-  'poodle'
-];
-
-const dogs = [
-  {
-      type: 'chihuahua',
-      name: 'fluh',
-      age: 5,
-  },
-  {
-      type: 'labradoodle',
-      name: 'momo',
-      age: 2,
-  },
-  {
-      type: 'st bernard',
-      name: 'slobber',
-      age: 9,
-  },
-  {
-      type: 'poodle',
-      name: 'slobber jr',
-      age: 1,
-  },
-      {
-      type: 'st bernard',
-      name: 'ignacious',
-      age: 3,
-  },
-]
-
+// 1) import superagent
+import request from 'superagent';
 
 // props are how parent components talk to child components -- we "pass" props from parents to children
 class App extends React.Component {
   state = { 
-    filter: 'chihuahua'
+    search: '',
+    isLoading: false,
+    pokeState: []
+  }
+
+  handleClick = async () => {
+    // 4) go hit the api and get the data
+    this.setState({ isLoading: true })
+    const data = await request.get(`https://alchemy-pokedex.herokuapp.com/api/pokedex?perPage=1000&pokemon=${this.state.search}`);
+
+    this.setState({ 
+      pokeState: data.body.results,
+      isLoading: false,
+     })
   }
 
   handleDogType = (e) => {
@@ -69,14 +27,19 @@ class App extends React.Component {
 
     this.setState({ filter: type })
   }
-  
   render() {
-    const filteredDogs = dogs.filter(dog => dog.type === this.state.filter)
-
     return (
-        <header className={styles.Box}>
-          <DropdownFilter options={options} handleDogType={this.handleDogType} />
-          <DogList dogs={filteredDogs} />
+        <header className={this.state.isRed 
+          ? styles.RedBox
+          : styles.Box
+          }>
+          <input onChange={(e) => this.setState({ search: e.target.value})} />
+          <button onClick={this.handleClick}>Fetch Pokemon!</button>
+          {
+            this.state.isLoading 
+              ? <p className={styles.spin}>LOADING</p> 
+              : this.state.pokeState.map(poke => <p>{poke.pokemon} : { poke.defense} </p>)
+          }
         </header>
     );
   }

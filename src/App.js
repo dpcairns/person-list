@@ -1,58 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react'
+import {
+    BrowserRouter as Router, 
+    Route, 
+    Switch,
+    Link,
+} from 'react-router-dom';
+import SearchPage from './SearchPage/SearchPage.js';
+import DetailPage from './DetailPage/DetailPage.js';
 import styles from './App.module.css';
-// 1) import superagent
-import request from 'superagent';
 
-// props are how parent components talk to child components -- we "pass" props from parents to children
-class App extends React.Component {
-  state = { 
-    search: '',
-    isLoading: false,
-    pokeState: []
-  }
-
-  handleClick = async () => {
-    // 4) go hit the api and get the data
-    this.setState({ isLoading: true })
-    const data = await request.get(`https://alchemy-pokedex.herokuapp.com/api/pokedex?perPage=1000&pokemon=${this.state.search}`);
-
-    this.setState({ 
-      pokeState: data.body.results,
-      isLoading: false,
-     })
-  }
-
-  handleDogType = (e) => {
-    const type = e.target.value;
-
-    this.setState({ filter: type })
-  }
-  render() {
-    return (
-        <header className={this.state.isRed 
-          ? styles.RedBox
-          : styles.Box
-          }>
-          <input onChange={(e) => this.setState({ search: e.target.value})} />
-          <button onClick={this.handleClick}>Fetch Pokemon!</button>
-          {
-            this.state.isLoading 
-              ? <p className={styles.spin}>LOADING</p> 
-              : this.state.pokeState.map(poke => <p>{poke.pokemon} : { poke.defense} </p>)
-          }
-        </header>
-    );
-  }
+export default class App extends Component {
+    render() {
+        return (
+          <>
+          <div className={styles.Box}>
+                <Router>
+                    <header>
+                      <li>
+                        <Link to="/detail">Detail</Link>
+                      </li>
+                      <li>
+                        <Link to="/">Home</Link>
+                      </li>
+                    </header>
+                    <Switch>
+                        <Route 
+                            path="/" 
+                            exact
+                            render={(routerProps) => <SearchPage {...routerProps} />} 
+                        />
+                        <Route 
+                            path="/detail/:myPokemonId" 
+                            exact
+                            render={(routerProps) => <DetailPage {...routerProps} />} 
+                        />
+                    </Switch>
+                </Router>
+            </div>
+            </>
+        )
+    }
 }
-
-// IMPERATIVE code:
-// it tells us HOW to do something
-// document.getElementById('my-div').textConent = user.name
-
-// DECLARATIVE code
-// it tells us WHAT to do
-// we don't care aboiut HOW
-// HIDES the HOW
-// <div>{user.name}</div>
-
-export default App;

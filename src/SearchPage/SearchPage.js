@@ -8,6 +8,7 @@ import PokeItem from './PokeItem.js';
 class SearchPage extends React.Component {
   state = { 
     search: '',
+    searchBy: 'pokemon',
     isLoading: false,
     pokeState: []
   }
@@ -15,7 +16,7 @@ class SearchPage extends React.Component {
   handleClick = async () => {
     // 4) go hit the api and get the data
     this.setState({ isLoading: true })
-    const data = await request.get(`https://alchemy-pokedex.herokuapp.com/api/pokedex?perPage=1000&pokemon=${this.state.search}`);
+    const data = await request.get(`https://alchemy-pokedex.herokuapp.com/api/pokedex?perPage=1000&${this.state.searchBy}=${this.state.search}`);
 
     this.setState({ 
       pokeState: data.body.results,
@@ -34,6 +35,12 @@ class SearchPage extends React.Component {
     return (
       <div>
           <input onChange={(e) => this.setState({ search: e.target.value})} />
+          <select onChange={(e) => { this.setState({ searchBy: e.target.value })} }>
+            <option value='pokemon'>name</option>
+            <option value='type'>type</option>
+            <option value='attack'>attack</option>
+            <option value='defense'>defense</option>
+          </select>
           <button onClick={this.handleClick}>Fetch Pokemon!</button>
           {
             isLoading 

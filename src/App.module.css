@@ -13,30 +13,24 @@
   }
 }
 
+.Search {
+  display: flex;
+}
+
+.Sidebar {
+  background-color: pink;
+}
+
+.Results {
+  background-color: lightgoldenrodyellow;
+  display: flex;
+  flex-wrap: wrap;
+}
 .Box {
-  background-color: #282c34;
+  background-color: lightgoldenrodyellow;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.RedBox {
-  background-color: crimson;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 .spin {

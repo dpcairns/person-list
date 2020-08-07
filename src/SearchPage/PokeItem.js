@@ -13,7 +13,7 @@ class PokeItem extends React.Component {
 
     return <Link to={`/detail/${pokemon}`}>
       <p className={styles.Box}>Hi, I'm {pokemon}</p>
-      <img src={url_image} alt={pokemon} />
+      <img height="100" width="100" src={url_image} alt={pokemon} />
     </Link>
     }
   }
